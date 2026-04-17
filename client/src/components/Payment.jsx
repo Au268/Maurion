@@ -32,7 +32,6 @@ const PaymentForm = ({ total, onSuccess }) => {
   const [cardName, setCardName] = useState('');
   const [loading,  setLoading]  = useState(false);
   const [error,    setError]    = useState('');
-  console.log("Stripe Key:", import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
   const handleSubmit = async () => {
     if (!stripe || !elements) return;
     setLoading(true);
