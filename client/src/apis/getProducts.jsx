@@ -3,21 +3,24 @@ const getProducts = async () => {
   const apiURL = `${BASE_URL}/api/products/get`;
 
   try {
-    const response = await fetch(apiURL,{
-      method:"GET"
-    });
-    if(!response.ok){
+    const response = await fetch(apiURL, { method: "GET" });
+    
+    if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-     const result = await response.json();
-     if(result.status === "Success"){
+
+    const result = await response.json();
+
+    if (result.status === "Success") {
       return result;
-     }
-     
-    
-    } catch (error) {
-      console.error("Error fetching data:", error);
     }
+
+    return null; // ✅ always return something
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return null; // ✅ return null instead of undefined
+  }
 };
 
 export default getProducts;
