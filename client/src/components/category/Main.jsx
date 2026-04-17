@@ -84,7 +84,7 @@ return (
 
           {/* ── Product Grid ───────────────────────────────────────────────── */}
           <div className="flex-1">
-            {allProducts? (
+            {allProducts.length === 0 ? (
               <div className="py-20 text-center text-neutral-400 font-label animate-pulse">
                 Loading products…
               </div>
