@@ -1,5 +1,7 @@
 const getProducts = async () => {
-  const apiURL = "http://localhost:5000/api/products/get";
+  const BASE_URL = import.meta.env.VITE_API_URL;
+  const apiURL = `${BASE_URL}/api/products/get`;
+
   try {
     const response = await fetch(apiURL,{
       method:"GET"
