@@ -22,7 +22,7 @@ mongoose.connect(MONGODB_URI)
 // API Routes
 app.use('/api/products', productRoutes);
 
-const paymentRoutes = require('./routes/paymentRoutes');
+const paymentRoutes = require('./routes/Paymentroutes.js');
 app.use('/api/payment', paymentRoutes);
 
 const PORT = process.env.PORT;
