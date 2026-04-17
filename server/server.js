@@ -43,7 +43,11 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'https://maurion-gzav.vercel.app',
+  origin: [
+    'https://maurion.vercel.app',
+    'https://maurion-gzav.vercel.app',
+    'http://localhost:5173'
+  ],
   credentials: true
 }));
 app.use(express.json());
