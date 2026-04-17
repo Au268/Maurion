@@ -6,7 +6,10 @@ const cors = require('cors');
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://maurion-gzav.vercel.app', // your frontend URL
+  credentials: true
+}));
 app.use(express.json());
 // Import Routes
 const productRoutes = require('./routes/productRoutes.js');
