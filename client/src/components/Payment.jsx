@@ -38,7 +38,8 @@ const PaymentForm = ({ total, onSuccess }) => {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:5000/api/payment/create-payment-intent', {
+      const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      const res = await fetch(`${API_BASE_URL}/api/payment/create-payment-intent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total }),
