@@ -3,7 +3,6 @@ const router = express.Router();
 const Stripe = require('stripe');
 require('dotenv').config();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-console.log(process.env.STRIPE_SECRET_KEY);
 // POST /api/payment/create-payment-intent
 router.post('/create-payment-intent', async (req, res) => {
   const { amount } = req.body; // amount in cents e.g. 2999 = $29.99
