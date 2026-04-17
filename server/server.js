@@ -13,7 +13,8 @@ const productRoutes = require('./routes/productRoutes.js');
 
 // DB connection
 const MONGODB_URI = process.env.MONGODB_URI;
-console.log(MONGODB_URI);
+console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
+console.log('STRIPE exists:', !!process.env.STRIPE_SECRET_KEY);
 
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('MongoDB connected!'))
