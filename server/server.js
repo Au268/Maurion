@@ -24,6 +24,4 @@ app.use('/api/products', productRoutes);
 
 const paymentRoutes = require('./routes/Paymentroutes.js');
 app.use('/api/payment', paymentRoutes);
-
-const PORT = process.env.PORT;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+module.exports = app;
