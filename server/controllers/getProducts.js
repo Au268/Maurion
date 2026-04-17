@@ -6,7 +6,7 @@ const getAllProducts = async (req, res) => {
     const products = await Product.find();
     if(products){
         res.json({
-            status:"Failure",
+            status:"Success",
             data:products
         });
     }
