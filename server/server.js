@@ -1,38 +1,3 @@
-// require('dotenv').config();
-
-// const express = require('express');
-// const mongoose = require('mongoose');
-// const cors = require('cors');
-
-
-// const app = express();
-// app.use(cors({
-//   origin: 'https://maurion-gzav.vercel.app', // your frontend URL
-//   credentials: true
-// }));
-// app.use(express.json());
-// // Import Routes
-// const productRoutes = require('./routes/productRoutes.js');
-
-// // DB connection
-// const MONGODB_URI = process.env.MONGODB_URI;
-// console.log('MONGODB_URI exists:', !!process.env.MONGODB_URI);
-// console.log('STRIPE exists:', !!process.env.STRIPE_SECRET_KEY);
-
-// mongoose.connect(MONGODB_URI)
-//   .then(() => console.log('MongoDB connected!'))
-//   .catch(err => console.error(err));
-
-// // const addProduct = require("./controllers/productController").addProduct();
-
-// // API Routes
-// app.use('/api/products', productRoutes);
-
-// const paymentRoutes = require('./routes/Paymentroutes.js');
-// app.use('/api/payment', paymentRoutes);
-// module.exports = app;
-
-
 require('dotenv').config();
 
 const express = require('express');
@@ -47,7 +12,8 @@ app.use(cors({
     'https://maurion.vercel.app',
     'https://maurion-gzav.vercel.app',
     'http://localhost:5173',
-    'https://www.maurion.co.uk'
+    'https://www.maurion.co.uk',
+    'http://localhost:5174'
   ],
   credentials: true
 }));
@@ -73,4 +39,8 @@ mongoose.connect(MONGODB_URI)
   .catch(err => console.error(err));
 
 // Export for Vercel
-module.exports = app;
+const PORT = process.env.PORT;
+app.listen(PORT,()=>{
+  console.log(`Server is running on ${PORT}`);
+})
+

@@ -1,0 +1,17 @@
+/* App-level layout */
+.admin-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.admin-main {
+  margin-left: 288px;
+  padding-top: 96px;
+  min-height: 100vh;
+  flex: 1;
+}
+
+.admin-canvas {
+  padding: 48px 48px 80px;
+  max-width: 1280px;
+}
