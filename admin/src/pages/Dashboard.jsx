@@ -11,14 +11,14 @@ export default function Dashboard() {
         {/* Header */}
         <section className="py-8 flex justify-between items-end mb-8">
           <div>
-            <p className="text-secondary font-label uppercase tracking-[0.3em] text-xs mb-2 text-gray-600">Executive Summary</p>
+            <p className="text-secondary font-label uppercase tracking-[0.3em] text-xs mb-2">Executive Summary</p>
             <h2 className="text-5xl font-headline font-bold tracking-tighter text-on-surface">Dashboard</h2>
           </div>
           <div className="flex gap-4">
-            <button className="px-6 py-3 bg-surface-container-high text-on-surface text-xs uppercase tracking-widest hover:bg-surface-container-highest transition-colors font-bold bg-gray-200 hover:bg-[#5F5E5E] hover:text-white ">
+            <button className="px-6 py-3  text-on-surface text-xs uppercase tracking-widest transition-colors font-bold bg-[#E8EDEB] hover:bg-[#DDE4E1] ">
               Export Report
             </button>
-            <button className="px-6 py-3 bg-primary text-on-primary text-xs uppercase tracking-widest hover:opacity-90 transition-opacity font-bold bg-[#5F5E5E] text-white p-4">
+            <button className="px-6 py-3 bg-primary text-on-primary text-xs uppercase tracking-widest hover:opacity-90 transition-opacity font-bold p-4">
               Add New Product
             </button>
           </div>
@@ -27,7 +27,7 @@ export default function Dashboard() {
         {/* Metrics Grid */}
         <section className="grid grid-cols-12 gap-6 mb-16">
           {/* Large Revenue Card */}
-          <div className="col-span-4 bg-surface-container-lowest p-8 flex flex-col justify-between bg-[#f2f4f4]">
+          <div className="col-span-4 bg-surface-container-lowest p-8 flex flex-col justify-between">
             <div>
               <p className="text-sm text-outline font-label uppercase tracking-widest mb-1">Total Revenue</p>
               <h3 className="text-5xl font-headline font-black text-on-surface">$142,850.00</h3>
@@ -36,7 +36,7 @@ export default function Dashboard() {
 
           {/* Bento Cards */}
           <div className="col-span-8 grid grid-cols-2 gap-6">
-            <div className="bg-surface-container-low p-8 flex flex-col justify-between bg-[#f2f4f4]">
+            <div className="bg-surface-container-low p-8 flex flex-col justify-between">
               <div className="flex justify-between items-center mb-8 ">
                 <p className="text-xs text-outline font-label uppercase tracking-widest">Total Orders</p>
                 <span className="material-symbols-outlined text-primary">shopping_cart</span>
@@ -46,7 +46,7 @@ export default function Dashboard() {
                 <span className="text-xs text-secondary italic">Units Sold</span>
               </div>
             </div>
-            <div className="bg-surface-container-low p-8 flex flex-col justify-between bg-[#f2f4f4]">
+            <div className="bg-surface-container-low p-8 flex flex-col justify-between">
               <div className="flex justify-between items-center mb-8">
                 <p className="text-xs text-outline font-label uppercase tracking-widest">Avg Order Value</p>
                 <span className="material-symbols-outlined text-primary">analytics</span>
@@ -56,7 +56,7 @@ export default function Dashboard() {
                 <span className="text-xs text-secondary italic">Avg / Cart</span>
               </div>
             </div>
-            <div className="col-span-2 bg-surface-container-low p-8 flex items-center justify-between bg-[#f2f4f4]">
+            <div className="col-span-2 bg-surface-container-low p-8 flex items-center justify-between">
               <div>
                 <p className="text-xs text-outline font-label uppercase tracking-widest mb-1">Conversion Rate</p>
                 <h4 className="text-3xl font-headline font-bold text-on-surface">3.82%</h4>
@@ -114,8 +114,8 @@ export default function Dashboard() {
             <h3 className="text-2xl font-headline font-bold tracking-tight mb-8">Top Sellers</h3>
             <div className="flex flex-col gap-6">
               {topSellers.map((item) => (
-                <div key={item.name} className="bg-surface-container-low p-4 flex gap-5 group bg-[#f2f4f4]">
-                  <div className="w-24 h-24 bg-secondary-container overflow-hidden flex-shrink-0">
+                <div key={item.name} className="bg-surface-container-low p-4 flex gap-5 group">
+                  <div className="w-24 h-24 bg-secondary-container overflow-hidden shrink-0">
                     <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                   </div>
                   <div className="flex flex-col justify-center ">
@@ -128,7 +128,7 @@ export default function Dashboard() {
                 </div>
               ))}
             </div>
-            <div className="mt-8 bg-primary p-8 text-on-primary bg-[#5F5E5E] text-white">
+            <div className="mt-8 bg-primary p-8 text-on-primary">
               <p className="font-headline font-light italic text-lg leading-tight mb-4">
                 "Success is not final, failure is not fatal: it is the courage to continue that counts."
               </p>
