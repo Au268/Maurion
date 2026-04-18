@@ -18,9 +18,7 @@ export default function Dashboard() {
             <button className="px-6 py-3  text-on-surface text-xs uppercase tracking-widest transition-colors font-bold bg-[#E8EDEB] hover:bg-[#DDE4E1] ">
               Export Report
             </button>
-            <button className="px-6 py-3 bg-primary text-on-primary text-xs uppercase tracking-widest hover:opacity-90 transition-opacity font-bold p-4">
-              Add New Product
-            </button>
+            
           </div>
         </section>
 

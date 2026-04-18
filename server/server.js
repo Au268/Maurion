@@ -31,7 +31,7 @@ const paymentRoutes = require('./routes/Paymentroutes.js');
 // API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/payment', paymentRoutes);
-
+app.use('/api/orders', require('./routes/order.js'));
 // DB Connection
 const MONGODB_URI = process.env.MONGODB_URI;
 mongoose.connect(MONGODB_URI)

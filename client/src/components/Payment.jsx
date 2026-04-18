@@ -56,7 +56,7 @@ const PaymentForm = ({ total, onSuccess }) => {
       if (stripeError) {
         setError(stripeError.message);
       } else if (paymentIntent.status === 'succeeded') {
-        onSuccess();
+        onSuccess(paymentIntent.id);
       }
     } catch {
       setError('Something went wrong. Please try again.');
@@ -150,11 +150,32 @@ const Payment = () => {
   const tax   = totalPrice * 0.08;
   const total = totalPrice + tax;
 
-  const handleSuccess = () => {
-    clearCart();
-    sessionStorage.removeItem('shipping');
-    setPlaced(true);
-  };
+
+
+// With this:
+const handleSuccess = async (paymentIntentId) => {
+  try {
+    const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    await fetch(`${API_BASE_URL}/api/orders`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        shipping,
+        items: cart,
+        subtotal: totalPrice,
+        tax,
+        total,
+        paymentIntentId,
+      }),
+    });
+  } catch (err) {
+    console.error('Order save failed:', err);
+  }
+
+  clearCart();
+  sessionStorage.removeItem('shipping');
+  setPlaced(true);
+};
 
   if (placed) {
     return (
