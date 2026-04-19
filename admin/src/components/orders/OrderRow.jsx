@@ -99,27 +99,73 @@ export default function OrderRow({ order,onStatusUpdate }) {
 
       {/* Action */}
       <td className="py-8 px-8 text-right relative">
+        {/* --- Pyara & Compact Button --- */}
         <button 
-          onClick={() => setIsOpen(!isOpen)}
-          className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-[#6B6B6B] hover:text-black transition-all"
+          onClick={() => setIsOpen(true)}
+          className="group inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-100 shadow-sm hover:border-black transition-all duration-300"
         >
-          <span>Update Status</span>
-          <span className="material-symbols-outlined text-sm">expand_more</span>
+          <span className="text-[9px] font-bold uppercase tracking-widest text-[#6B6B6B] group-hover:text-black">
+            Status
+          </span>
+          <span className="material-symbols-outlined text-[16px] text-gray-400 group-hover:text-black transition-transform group-hover:rotate-12">
+            stat_minus_1
+          </span>
         </button>
 
-        {/* Dropdown Menu */}
+        {/* --- Small Right-Aligned Popup --- */}
         {isOpen && (
-          <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-xl border border-gray-100 z-50 overflow-hidden">
-            {STATUS_OPTIONS.map((status) => (
-              <button
-                key={status}
-                disabled={isUpdating || order.status === status}
-                onClick={() => handleUpdate(status)}
-                className="w-full text-left px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 capitalize disabled:opacity-50"
-              >
-                {status.replace('-', ' ')}
-              </button>
-            ))}
+          <div className="fixed inset-0 z-100 flex items-center justify-end pr-8 md:pr-16">
+            
+            <div 
+              className="absolute inset-0 bg-black/5 backdrop-blur-[1px]"
+              onClick={() => setIsOpen(false)} 
+            />
+
+            {/* Compact Card Content */}
+            <div className="relative bg-white w-64 rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.15)] border border-gray-100 p-5 animate-in fade-in zoom-in-95 slide-in-from-right-4 duration-300">
+              
+              {/* Mini Header */}
+              <div className="flex justify-between items-center mb-4 pb-3 border-b border-gray-50">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-black">
+                  Change Status
+                </span>
+                <button 
+                  onClick={() => setIsOpen(false)} 
+                  className="text-gray-300 hover:text-black transition-colors"
+                >
+                  <span className="material-symbols-outlined text-lg">close</span>
+                </button>
+              </div>
+
+              {/* Status List: Compact & Clean */}
+              <div className="flex flex-col gap-1">
+                {STATUS_OPTIONS.map((status) => {
+                  const isCurrent = order.status === status;
+                  return (
+                    <button
+                      key={status}
+                      disabled={isUpdating || isCurrent}
+                      onClick={() => handleUpdate(status)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-[10px] font-bold uppercase tracking-tight transition-all
+                        ${isCurrent 
+                          ? 'bg-gray-50 text-gray-300 cursor-default' 
+                          : 'text-[#555] hover:bg-black hover:text-white active:scale-95'
+                        }`}
+                    >
+                      <span className="truncate">{status.replace('-', ' ')}</span>
+                      {isCurrent && <span className="material-symbols-outlined text-[14px]">check_circle</span>}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Order ID Tag */}
+              <div className="mt-4 pt-3 text-center border-t border-gray-50">
+                <span className="text-[8px] font-bold text-gray-300 uppercase tracking-widest">
+                  Order ID: {order.order_id.slice(-6)}
+                </span>
+              </div>
+            </div>
           </div>
         )}
       </td>

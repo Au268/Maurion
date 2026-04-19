@@ -11,6 +11,9 @@ export default function App() {
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
   const [update, setUpdate] = useState(false);
+  
+  // State to manage the drawer visibility
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const triggerRefresh = () => setUpdate((prev) => !prev);
 
@@ -33,18 +36,38 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className="flex bg-[#f9f9f9] min-h-screen">
-        <SideNav />
-        <main className="ml-60 flex-1">
+      <div className="bg-[#f9f9f9] min-h-screen relative overflow-x-hidden">
+        
+        {/* Pass the drawer state and setter to SideNav */}
+        <SideNav isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
+
+        <main className="ml-0 lg:ml-72 transition-all duration-300 min-h-screen">
+          {/* IMPORTANT: Your pages (Dashboard, Orders, Products) 
+             inside these Routes likely call <TopBar />. 
+             Make sure you pass 'onMenuClick={() => setIsMenuOpen(true)}' 
+             to TopBar within those page components!
+          */}
           <Routes>
-            <Route path="/" element={<Dashboard orders={orders} />} />
+            <Route path="/" element={<Dashboard orders={orders} onMenuOpen={() => setIsMenuOpen(true)} />} />
             <Route
               path="/orders"
-              element={<Orders orders={orders} onStatusUpdate={triggerRefresh} />}
+              element={
+                <Orders 
+                  orders={orders} 
+                  onStatusUpdate={triggerRefresh} 
+                  onMenuOpen={() => setIsMenuOpen(true)} 
+                />
+              }
             />
             <Route
               path="/products"
-              element={<Products products={products} onRefresh={triggerRefresh} />}
+              element={
+                <Products 
+                  products={products} 
+                  onRefresh={triggerRefresh} 
+                  onMenuOpen={() => setIsMenuOpen(true)} 
+                />
+              }
             />
           </Routes>
         </main>
