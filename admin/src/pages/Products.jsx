@@ -1,36 +1,123 @@
+import { useMemo, useState } from "react";
 import TopBar from "../components/layout/TopBar";
 import StatusBadge from "../components/ui/StatusBadge";
-import { products } from "../data/mockData";
+import EditProductModal from "../components/modals/EditProductModal";
+import DeleteProductWarning from "../components/modals/DeleteProductWarning";
+import AddProductModal from "../components/modals/Addproductmodal";
 
-export default function Products() {
+// ── swap these with your real API functions ──────────────────────────────────
+// import { createProduct, updateProduct, deleteProduct } from "../api/products_api";
+// ─────────────────────────────────────────────────────────────────────────────
+
+export default function Products({ products, onRefresh }) {
+  const [editTarget, setEditTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [showAdd, setShowAdd] = useState(false);
+
+  const { lowStock, outOfStock } = useMemo(() => ({
+    lowStock: products.filter((p) => p.stock > 0 && p.stock <= 10).length,
+    outOfStock: products.filter((p) => p.stock === 0).length,
+  }), [products]);
+
+  /* ── handlers: call API then let App re-fetch ── */
+  const handleSave = async (updated) => {
+    try {
+      // If a new image file was picked, build FormData; otherwise send JSON
+      if (updated.imageFile) {
+        const fd = new FormData();
+        fd.append("image", updated.imageFile);
+        fd.append("title", updated.title);
+        fd.append("category", updated.category);
+        fd.append("description", updated.description);
+        fd.append("price", updated.price);
+        fd.append("stock", updated.stock);
+        updated.colors.forEach((c) => fd.append("colors", c));
+        await updateProduct(updated._id, fd);
+      } else {
+        const { imageFile, ...payload } = updated;
+        await updateProduct(updated._id, payload);
+      }
+      onRefresh();
+    } catch (err) {
+      console.error("Failed to update product:", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await deleteProduct(id);
+      onRefresh();
+    } catch (err) {
+      console.error("Failed to delete product:", err);
+    }
+  };
+
+  const handleAdd = async (newProduct) => {
+    try {
+      const fd = new FormData();
+      if (newProduct.imageFile) fd.append("image", newProduct.imageFile);
+      fd.append("title", newProduct.title);
+      fd.append("category", newProduct.category);
+      fd.append("description", newProduct.description);
+      fd.append("price", newProduct.price);
+      fd.append("stock", newProduct.stock);
+      newProduct.colors.forEach((c) => fd.append("colors", c));
+      await createProduct(fd);
+      onRefresh();
+    } catch (err) {
+      console.error("Failed to create product:", err);
+    }
+  };
+
   return (
     <>
+      {/* ── Modals ── */}
+      <EditProductModal
+        product={editTarget}
+        onClose={() => setEditTarget(null)}
+        onSave={handleSave}
+      />
+      <DeleteProductWarning
+        product={deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+      />
+      {showAdd && (
+        <AddProductModal
+          onClose={() => setShowAdd(false)}
+          onAdd={handleAdd}
+        />
+      )}
+
+      {/* ── Page ── */}
       <TopBar placeholder="Search catalog..." />
       <div className="pt-32 pb-16 px-10">
-        {/* Header Section */}
+
+        {/* Header */}
         <section className="mb-14 px-12">
           <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-[#888888] mb-6 px-2">
             <span>Inventory Management</span>
           </div>
-
           <div className="flex justify-between items-center">
             <h1 className="text-[56px] font-bold tracking-[-0.04em] text-[#1A1A1A] leading-none">
               Product Catalog
             </h1>
-            <button className="flex items-center gap-2 px-2 py-2 text-[#1A1A1A] hover:bg-gray-50 transition-all font-bold text-sm">
+            <button
+              onClick={() => setShowAdd(true)}
+              className="flex items-center gap-2 px-2 py-2 text-[#1A1A1A] hover:bg-gray-50 transition-all font-bold text-sm"
+            >
               <span className="material-symbols-outlined text-[20px]">add</span>
               Add New Product
             </button>
           </div>
         </section>
 
-        {/* Stats Row with Vertical Dividers */}
-        {/* Stats Row with Vertical Dividers */}
+        {/* Stats */}
         <section className="grid grid-cols-4 gap-0 mb-20 px-12">
           {[
-            { label: "Total SKUs", value: "1,284" },
-            { label: "Low Stock", value: "12", isThick: true },
-            { label: "Out of Stock", value: "0" },
+            { label: "Total SKUs", value: products.length },
+            { label: "Low Stock", value: lowStock, isThick: true },
+            { label: "Out of Stock", value: outOfStock },
             { label: "Active Categories", value: "08" },
           ].map((s, index) => (
             <div
@@ -49,22 +136,17 @@ export default function Products() {
           ))}
         </section>
 
-        {/* Table Section */}
+        {/* Table */}
         <section className="px-12">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-gray-100">
-                {[
-                  "Product",
-                  "Category",
-                  "Price",
-                  "Stock",
-                  "Status",
-                  "Actions",
-                ].map((h) => (
+                {["Product", "Category", "Price", "Stock", "Status", "Actions"].map((h) => (
                   <th
                     key={h}
-                    className={`py-6 text-[11px] font-bold text-[#888888] tracking-[0.15em] uppercase ${h === "Actions" ? "text-right" : ""}`}
+                    className={`py-6 text-[11px] font-bold text-[#888888] tracking-[0.15em] uppercase ${
+                      h === "Actions" ? "text-right" : ""
+                    }`}
                   >
                     {h}
                   </th>
@@ -74,7 +156,7 @@ export default function Products() {
             <tbody>
               {products.map((product) => (
                 <tr
-                  key={product.id}
+                  key={product._id}
                   className="border-b border-transparent hover:bg-gray-50/40 transition-colors group"
                 >
                   {/* Product Info */}
@@ -83,16 +165,16 @@ export default function Products() {
                       <div className="w-16 h-16 bg-[#F5F5F5] rounded-sm overflow-hidden flex items-center justify-center p-2">
                         <img
                           src={product.image}
-                          alt={product.name}
+                          alt={product.title}
                           className="w-full h-full object-contain mix-blend-multiply"
                         />
                       </div>
                       <div className="flex flex-col gap-1">
                         <span className="font-bold text-[#1A1A1A] text-[15px]">
-                          {product.name}
+                          {product.title}
                         </span>
                         <span className="text-[10px] text-[#999999] font-bold tracking-widest uppercase">
-                          {product.id}
+                          {product._id}
                         </span>
                       </div>
                     </div>
@@ -105,30 +187,48 @@ export default function Products() {
 
                   {/* Price */}
                   <td className="py-8 text-[16px] font-bold text-[#1A1A1A]">
-                    {product.price}
+                    ${product.price}
                   </td>
 
                   {/* Stock */}
                   <td
-                    className={`py-8 text-[14px] font-medium ${product.stock <= 10 ? "text-[#C15B56] font-bold" : "text-[#444444]"}`}
+                    className={`py-8 text-[14px] font-medium ${
+                      product.stock <= 10 ? "text-[#C15B56] font-bold" : "text-[#444444]"
+                    }`}
                   >
                     {product.stock} Units
                   </td>
 
                   {/* Status */}
                   <td className="py-8">
-                    <StatusBadge status={product.status} />
+                    <StatusBadge
+                      status={
+                        product.stock === 0
+                          ? "Out of Stock"
+                          : product.stock <= 10
+                          ? "Low Stock"
+                          : "In Stock"
+                      }
+                    />
                   </td>
 
-                  {/* Actions - Now Always Visible */}
+                  {/* Actions */}
                   <td className="py-8 text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                      <button
+                        onClick={() => setEditTarget(product)}
+                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                        title="Edit product"
+                      >
                         <span className="material-symbols-outlined text-[18px] text-[#666666]">
                           edit
                         </span>
                       </button>
-                      <button className="p-2 hover:bg-red-50 rounded-full transition-colors">
+                      <button
+                        onClick={() => setDeleteTarget(product)}
+                        className="p-2 hover:bg-red-50 rounded-full transition-colors"
+                        title="Delete product"
+                      >
                         <span className="material-symbols-outlined text-[18px] text-[#C15B56]">
                           delete
                         </span>
@@ -140,6 +240,7 @@ export default function Products() {
             </tbody>
           </table>
         </section>
+
       </div>
     </>
   );

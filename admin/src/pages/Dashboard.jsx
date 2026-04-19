@@ -1,8 +1,58 @@
 import TopBar from "../components/layout/TopBar";
 import StatusBadge from "../components/ui/StatusBadge";
-import { recentOrders, topSellers } from "../data/mockData";
+import { useMemo } from 'react';
 
-export default function Dashboard() {
+export default function Dashboard({orders}) {
+
+ const totalRevenue = (orders || []).reduce((acc, order) => {
+  return acc + (parseFloat(order.total) || 0);
+}, 0);
+
+
+  const formattedRevenue = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(totalRevenue)
+
+  const totalOrders = orders.length;
+
+
+  const avgOrderValue = totalRevenue/totalOrders;
+  const formattedAvgValue = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(avgOrderValue)
+
+
+
+const topSellers = useMemo(() => {
+  const productMap = {};
+
+
+  orders.forEach((order) => {
+
+    order.items.forEach((item) => {
+      if (!productMap[item.id]) {
+        productMap[item.id] = {
+          name: item.title,
+          category: item.category || 'General', 
+          image: item.image,
+          units: 0,
+          revenue: 0,
+        };
+      }
+
+      productMap[item.id].units += item.quantity;
+      productMap[item.id].revenue += item.price * item.quantity;
+    });
+  });
+
+
+  return Object.values(productMap)
+    .sort((a, b) => b.units - a.units)
+    .slice(0, 5);
+}, [orders]);
+
   return (
     <>
       <TopBar placeholder="Search insights..." />
@@ -28,7 +78,7 @@ export default function Dashboard() {
           <div className="col-span-4 bg-surface-container-lowest p-8 flex flex-col justify-between">
             <div>
               <p className="text-sm text-outline font-label uppercase tracking-widest mb-1">Total Revenue</p>
-              <h3 className="text-5xl font-headline font-black text-on-surface">$142,850.00</h3>
+              <h3 className="text-5xl font-headline font-black text-on-surface">{formattedRevenue}</h3>
             </div>
           </div>
 
@@ -40,8 +90,8 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined text-primary">shopping_cart</span>
               </div>
               <div className="flex items-baseline gap-4 ">
-                <h4 className="text-3xl font-headline font-bold text-on-surface">1,284</h4>
-                <span className="text-xs text-secondary italic">Units Sold</span>
+                <h4 className="text-3xl font-headline font-bold text-on-surface">{totalOrders}</h4>
+                <span className="text-xs text-secondary italic">orders</span>
               </div>
             </div>
             <div className="bg-surface-container-low p-8 flex flex-col justify-between">
@@ -50,21 +100,11 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined text-primary">analytics</span>
               </div>
               <div className="flex items-baseline gap-4 ">
-                <h4 className="text-3xl font-headline font-bold text-on-surface">$111.25</h4>
+                <h4 className="text-3xl font-headline font-bold text-on-surface">{formattedAvgValue}</h4>
                 <span className="text-xs text-secondary italic">Avg / Cart</span>
               </div>
             </div>
-            <div className="col-span-2 bg-surface-container-low p-8 flex items-center justify-between">
-              <div>
-                <p className="text-xs text-outline font-label uppercase tracking-widest mb-1">Conversion Rate</p>
-                <h4 className="text-3xl font-headline font-bold text-on-surface">3.82%</h4>
-              </div>
-              <div className="w-2/3 h-12 flex items-end gap-1 px-4">
-                {["h-1/2", "h-2/3", "h-1/3", "h-4/5", "h-full", "h-1/2"].map((h, i) => (
-                  <div key={i} className={`w-full ${i === 4 ? "bg-primary" : "bg-primary-container"} ${h}`} />
-                ))}
-              </div>
-            </div>
+            
           </div>
         </section>
 
@@ -85,24 +125,38 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-surface-container-low">
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="hover:bg-surface-container-low transition-colors">
-                    <td className="py-6 px-6 font-headline font-bold text-sm">{order.id}</td>
-                    <td className="py-6 px-6">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-[10px] font-bold text-secondary">
-                          {order.initials}
+                {orders.map((order) => {
+                  const initials = `${order.shipping?.firstName?.[0] || ''}${order.shipping?.lastName?.[0] || ''}`.toUpperCase();
+                  const formattedDate = new Date(order.createdAt).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  });
+
+                  
+                  return (
+                    <tr key={order.order_id} className="hover:bg-surface-container-low transition-colors">
+                      <td className="py-6 px-6 font-headline font-bold text-sm">
+                        {order.order_id.slice(-6).toUpperCase()}
+                      </td>
+                      <td className="py-6 px-6">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-[10px] font-bold text-secondary">
+                            {initials}
+                          </div>
+                          <span className="text-sm font-medium">
+                            {order.shipping.firstName} {order.shipping.lastName}
+                          </span>
                         </div>
-                        <span className="text-sm font-medium">{order.customer}</span>
-                      </div>
-                    </td>
-                    <td className="py-6 px-6 text-sm text-outline">{order.date}</td>
-                    <td className="py-6 px-6 text-sm font-bold">{order.total}</td>
-                    <td className="py-6 px-6">
-                      <StatusBadge status={order.status} />
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="py-6 px-6 text-sm text-outline">{formattedDate}</td>
+                      <td className="py-6 px-6 text-sm font-bold">${order.total.toFixed(2)}</td>
+                      <td className="py-6 px-6">
+                        <StatusBadge status={order.status} />
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </section>
@@ -111,20 +165,28 @@ export default function Dashboard() {
           <section className="col-span-4">
             <h3 className="text-2xl font-headline font-bold tracking-tight mb-8">Top Sellers</h3>
             <div className="flex flex-col gap-6">
-              {topSellers.map((item) => (
-                <div key={item.name} className="bg-surface-container-low p-4 flex gap-5 group">
-                  <div className="w-24 h-24 bg-secondary-container overflow-hidden shrink-0">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  </div>
-                  <div className="flex flex-col justify-center ">
-                    <p className="text-[10px] uppercase tracking-widest text-secondary font-bold mb-1">{item.category}</p>
-                    <h4 className="font-headline font-bold text-on-surface">{item.name}</h4>
-                    <p className="text-sm text-outline mt-1">
-                      {item.units} Units • <span className="font-bold text-on-surface">{item.revenue}</span>
-                    </p>
-                  </div>
-                </div>
-              ))}
+            {topSellers.map((item) => (
+            <div key={item.name} className="bg-surface-container-low p-4 flex gap-5 group">
+              <div className="w-24 h-24 bg-secondary-container overflow-hidden shrink-0">
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
+              </div>
+              <div className="flex flex-col justify-center">
+                <p className="text-[10px] uppercase tracking-widest text-secondary font-bold mb-1">
+                  {item.category}
+                </p>
+                <h4 className="font-headline font-bold text-on-surface">{item.name}</h4>
+                <p className="text-sm text-outline mt-1">
+                  {item.units} Units • <span className="font-bold text-on-surface">
+                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(item.revenue)}
+                  </span>
+                </p>
+              </div>
+            </div>
+          ))}
             </div>
             <div className="mt-8 bg-primary p-8 text-on-primary">
               <p className="font-headline font-light italic text-lg leading-tight mb-4">
