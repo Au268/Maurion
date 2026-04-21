@@ -18,7 +18,7 @@ const Hero = () => {
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-24 md:pb-32 px-4 w-full">
         <div className="flex flex-col items-center w-full">
           <Link 
-            to="/category/polo-shirts" 
+            to="/category/Accessories" 
             className="bg-zinc-950 text-white 
                        w-full sm:w-auto px-14 py-4 text-[12px] 
                        md:px-24 md:py-5 md:text-sm 

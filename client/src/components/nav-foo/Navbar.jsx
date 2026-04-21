@@ -8,12 +8,12 @@ const Navbar = () => {
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Tracksuits', path: '/tracksuits' },
-    { name: 'Polo Shirts', path: '/polo-shirts' },
-    { name: 'Jackets', path: '/jackets' },
-    { name: 'T-Shirts', path: '/t-shirts' },
-    { name: 'Perfumes', path: '/perfumes' },
-    { name: 'Accessories', path: '/accessories' },
+    { name: 'Tracksuits', path: '/category/tracksuits' },
+    { name: 'Polo Shirts', path: '/category/polo-shirts' },
+    { name: 'Jackets', path: '/category/jackets' },
+    { name: 'T-Shirts', path: '/category/t-shirts' },
+    { name: 'Perfumes', path: '/category/perfumes' },
+    { name: 'Accessories', path: '/category/Accessories' },
   ];
 
   return (
