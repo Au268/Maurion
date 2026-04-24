@@ -75,7 +75,7 @@ const editProduct = async (req, res) => {
     }
 
     if (title       !== undefined) product.title       = title;
-    if (price       !== undefined) product.price       = price;
+    if (price !== undefined) product.price = parseFloat(price);
     if (category    !== undefined) product.category    = category;
     if (description !== undefined) product.description = description;
     if (stock       !== undefined) product.stock       = Number(stock);
