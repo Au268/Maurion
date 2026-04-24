@@ -13,6 +13,7 @@ export default function DeleteProductWarning({ product, onClose, onConfirm }) {
  const handleDelete = () => {
   if (!isConfirmed) return;
   // Just pass the id up — let Products.jsx call the API
+  setConfirmText("");
   onConfirm(product._id);
   onClose();
 };

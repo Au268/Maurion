@@ -22,7 +22,7 @@ const CategoryArchive = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8 h-300 md:h-200">
         {/* Tracksuits (Large Vertical) */}
         <Link
-          to="#"
+          to="/category/tracksuits"
           className="md:col-span-1 md:row-span-2 group relative overflow-hidden bg-surface-container-low block"
         >
           <img
@@ -38,7 +38,7 @@ const CategoryArchive = () => {
         </Link>
         {/* Polo Shirts (Square) */}
         <Link
-          to="#"
+          to="/category/polo-shirts"
           className="md:col-span-2 group relative overflow-hidden bg-surface-container-low block"
         >
           <img
@@ -54,7 +54,7 @@ const CategoryArchive = () => {
         </Link>
         {/* Perfumes (Small Portrait) */}
         <Link
-          to="#"
+          to="/category/perfumes"
           className="md:col-span-1 group relative overflow-hidden bg-surface-container-low block"
         >
           <img
@@ -70,7 +70,7 @@ const CategoryArchive = () => {
         </Link>
         {/* Jackets (Horizontal) */}
         <Link
-          to="#"
+          to="/category/jackets"
           className="md:col-span-2 group relative overflow-hidden bg-surface-container-low block"
         >
           <img
@@ -86,7 +86,7 @@ const CategoryArchive = () => {
         </Link>
         {/* T-Shirts (Square) */}
         <Link
-          to="#"
+          to="/category/t-shirts"
           className="md:col-span-1 group relative overflow-hidden bg-surface-container-low block"
         >
           <img

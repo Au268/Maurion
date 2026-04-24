@@ -45,9 +45,11 @@ const Navbar = () => {
           </div>
 
           <div className="flex-1 flex justify-end items-center gap-4 md:gap-6">
-            <button className="hover:scale-110 transition-transform">
+            <Link to={"/collections"}>
+            <button className="hover:scale-110 transition-transform cursor-pointer">
               <span className="material-symbols-outlined text-[22px] md:text-[24px]">search</span>
             </button>
+            </Link>
             <button className="hover:scale-110 transition-transform">
               <span className="material-symbols-outlined text-[22px] md:text-[24px]">person</span>
             </button>

@@ -59,19 +59,22 @@ const Cart = () => {
               className="flex gap-6 py-8 group"
               style={{ animationDelay: `${index * 60}ms` }}
             >
-              <Link to={`/product/${item.id}`} className="shrink-0">
+             <Link to={`/product/${item.id}`} className="shrink-0">
                 <div className="w-12 h-14 md:w-16 md:h-20 bg-zinc-100 overflow-hidden rounded-md">
-                  {item.image ? (
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <span className="material-symbols-outlined text-zinc-300 text-3xl">image</span>
-                    </div>
-                  )}
+                  {(() => {
+                    const src = item.images?.[0]?.url || item.image || null;
+                    return src ? (
+                      <img
+                        src={src}
+                        alt={item.title}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="material-symbols-outlined text-zinc-300 text-3xl">image</span>
+                      </div>
+                    );
+                  })()}
                 </div>
               </Link>
 

@@ -1,8 +1,8 @@
 import { useState, useRef } from "react";
 
 const CATEGORIES = [
-  "Accessories", "Electronics", "Furniture", "Clothing", "Books",
-  "Sports", "Home & Garden", "Toys", "Health & Beauty", "Automotive",
+  "Accessories", "tracksuits", "polo-shirts","jackets", "t-shirts", "perfumes",
+  "summer-essentials",
 ];
 
 const PRESET_COLORS = [
@@ -51,12 +51,14 @@ export default function AddProductModal({ onClose, onAdd }) {
     setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const toggleColor = (hex) => {
-    setForm((prev) => ({
-      ...prev,
-      colors: prev.colors.includes(hex) ? prev.colors.filter((c) => c !== hex) : [...prev.colors, hex],
-    }));
-  };
+ const toggleColor = (label) => {
+  setForm((prev) => ({
+    ...prev,
+    colors: prev.colors.includes(label) 
+      ? prev.colors.filter((c) => c !== label) 
+      : [...prev.colors, label],
+  }));
+};
 
   const validate = () => {
     const errs = {};
@@ -180,23 +182,32 @@ export default function AddProductModal({ onClose, onAdd }) {
               Colors <span className="ml-2 text-[#BBBBBB] normal-case tracking-normal font-medium">(select all that apply)</span>
             </label>
             <div className="flex flex-wrap gap-2">
-              {PRESET_COLORS.map(({ hex, label }) => {
-                const selected = form.colors.includes(hex);
-                return (
-                  <button key={hex} type="button" onClick={() => toggleColor(hex)} title={label}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm border text-[12px] font-medium transition-all ${
+              
+            
+                    {PRESET_COLORS.map(({ hex, label }) => {
+            // Check against label now
+            const selected = form.colors.includes(label);
+            return (
+              <button 
+                key={label} // Use label as key
+                type="button" 
+                onClick={() => toggleColor(label)} // Pass the label
+                title={label}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-sm border text-[12px] font-medium transition-all ${
                       selected ? "border-[#1A1A1A] bg-[#F5F5F5]" : "border-gray-200 hover:border-gray-400"
-                    }`}>
-                    <span className={`w-3.5 h-3.5 rounded-full flex-shrink-0 ${hex === "#FFFFFF" ? "border border-gray-300" : ""}`}
-                      style={{ backgroundColor: hex }} />
-                    <span className="text-[#444444]">{label}</span>
-                    {selected && <span className="material-symbols-outlined text-[13px] text-[#1A1A1A]">check</span>}
-                  </button>
-                );
-              })}
-            </div>
+                    }`}
+              >
+                <span 
+                  className={`w-3.5 h-3.5 rounded-full flex-shrink-0 ${hex === "#FFFFFF" ? "border border-gray-300" : ""}`}
+                  style={{ backgroundColor: hex }} 
+                />
+                <span className="text-[#444444]">{label}</span>
+                {selected && <span className="material-symbols-outlined text-[13px] text-[#1A1A1A]">check</span>}
+              </button>
+            );
+          })}
           </div>
-
+          </div>
           {/* Multi-image upload */}
           <div className="flex flex-col gap-1.5">
             <label className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#888888]">

@@ -15,6 +15,8 @@ const mockColors = [
   { name: 'Red',    hex: 'bg-red-500' },
   { name: 'Green',  hex: 'bg-green-500' },
   { name: 'Yellow', hex: 'bg-yellow-400' },
+  {name : 'Purple' , hex: 'bg-purple-400'},
+  {name:'Orange' , hex : 'bg-orange-500'}
 ];
 
 const mockSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
@@ -144,10 +146,15 @@ const Product = () => {
   const goNext = useCallback(() => setActiveImg(i => (i + 1) % images.length), [images.length]);
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedColor, selectedSize);
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2000);
+  // Attach a flat `image` field so CartContext always has something to display
+  const productWithImage = {
+    ...product,
+    image: images[0] || product.images?.[0]?.url || product.image || '',
   };
+  addToCart(productWithImage, quantity, selectedColor, selectedSize);
+  setAdded(true);
+  setTimeout(() => setAdded(false), 2000);
+};
 
   if (loading) return <div className="pt-32 pb-20 text-center text-neutral-400 animate-pulse">Loading product…</div>;
   if (!product) return <div className="pt-32 pb-20 text-center text-neutral-500">Product not found.</div>;
