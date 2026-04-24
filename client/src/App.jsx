@@ -4,6 +4,7 @@ import './index.css';
 
 import Navbar from './components/nav-foo/Navbar';
 import Home from './components/Home';
+import ShopPage from './components/home/ShopCollection';
 import Category from './components/Category';
 import Product from './components/Product';
 import Footer from './components/nav-foo/Footer';
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path="*" element={<Home />} />
           <Route path="/category/:category" element={<Category />} />
+          <Route path="/collections" element={<ShopPage />} />
           <Route path="/product" element={<Product />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />

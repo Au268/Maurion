@@ -4,7 +4,7 @@ import Hero from './home/Hero';
 import CategoryArchive from './home/CategoryArchive';
 import ModernWorkspaces from './home/ModernWorkspaces';
 import SummerExpedition from './home/SummerExpedition';
-import Testimonials from './home/Testimonials';
+// import Testimonials from './home/Testimonials';
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
       <CategoryArchive />
       <ModernWorkspaces />
       <SummerExpedition />
-      <Testimonials />
+      {/* <Testimonials /> */}
     </>
   );
 };

@@ -56,7 +56,7 @@ const Shipping = () => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-16">
+      
 
         {/* Form */}
         <div className="flex flex-col lg:flex-row gap-16">
@@ -87,7 +87,6 @@ const Shipping = () => {
                 />
               </div>
             ))}
-          </div>
             </div>
           <div className="flex gap-4 mt-10">
             <Link

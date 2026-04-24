@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Route } from 'react-router-dom';
 import logo from '../../assets/logo.jpeg';
+import ShopPage from './ShopCollection';
 
 const Hero = () => {
   return (
@@ -18,7 +19,7 @@ const Hero = () => {
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-24 md:pb-32 px-4 w-full">
         <div className="flex flex-col items-center w-full">
           <Link 
-            to="/category/Accessories" 
+            to="/collections" 
             className="bg-zinc-950 text-white 
                        w-full sm:w-auto px-14 py-4 text-[12px] 
                        md:px-24 md:py-5 md:text-sm 
