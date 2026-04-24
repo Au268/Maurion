@@ -54,8 +54,10 @@ const PaymentForm = ({ total, onSuccess }) => {
       });
 
       if (stripeError) {
+        // ADD THIS LOG:
+        console.error("Stripe Confirmation Error:", stripeError); 
         setError(stripeError.message);
-      } else if (paymentIntent.status === 'succeeded') {
+      } else if (paymentIntent && paymentIntent.status === 'succeeded') {
         onSuccess(paymentIntent.id);
       }
     } catch {
