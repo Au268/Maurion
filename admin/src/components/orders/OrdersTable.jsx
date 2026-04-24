@@ -21,7 +21,7 @@ export default function OrdersTable({ orders,onStatusUpdate }) {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-surface-container-low">
-              {["Order ID", "Customer", "Items", "Date", "Total", "Status", "Action"].map((h, i) => (
+              {["Order ID", "Customer", "Items", "Date","Address", "Total", "Status", "Action"].map((h, i) => (
                 <th
                   key={h}
                   className={`py-6 ${i === 0 ? "px-8" : "px-6"} text-[10px] uppercase tracking-widest text-secondary font-bold ${h === "Action" ? "text-right px-8" : ""}`}

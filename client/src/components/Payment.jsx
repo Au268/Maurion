@@ -146,7 +146,8 @@ const Payment = () => {
 
   // Guard: if no shipping data, send back
   const shipping = JSON.parse(sessionStorage.getItem('shipping') || '{}');
-
+  console.log(shipping);
+  
   const tax   = totalPrice * 0.08;
   const total = totalPrice + tax;
 

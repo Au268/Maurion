@@ -2,8 +2,11 @@ import { useMemo } from 'react';
 import TopBar from "../components/layout/TopBar";
 import StatusBadge from "../components/ui/StatusBadge";
 
+// Supports both old single-image and new multi-image schema
+const getFirstImage = (item) =>
+  item.images?.[0]?.url || item.image || null;
+
 export default function Dashboard({ orders, onMenuOpen }) {
-  // Logic remains the same
   const totalRevenue = (orders || []).reduce((acc, order) => acc + (parseFloat(order.total) || 0), 0);
   const formattedRevenue = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totalRevenue);
   const totalOrders = orders.length;
@@ -18,7 +21,7 @@ export default function Dashboard({ orders, onMenuOpen }) {
           productMap[item.id] = {
             name: item.title,
             category: item.category || 'General',
-            image: item.image,
+            image: getFirstImage(item), // ← handles both schemas
             units: 0,
             revenue: 0,
           };
@@ -33,11 +36,10 @@ export default function Dashboard({ orders, onMenuOpen }) {
   return (
     <>
       <TopBar placeholder="Search insights..." onMenuClick={onMenuOpen} />
-      
-      {/* 1. Adjusted Padding & Margin: Removed fixed 'ms-20', handled by Layout wrapper instead */}
+
       <main className="pt-24 md:pt-32 pb-20 px-4 md:px-8 lg:px-12 max-w-400 mx-auto transition-all duration-300">
 
-        {/* Header: Stacks on small mobile */}
+        {/* Header */}
         <section className="py-8 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-6 mb-8">
           <div>
             <p className="text-secondary font-label uppercase tracking-[0.3em] text-[10px] md:text-xs mb-2">Executive Summary</p>
@@ -48,9 +50,8 @@ export default function Dashboard({ orders, onMenuOpen }) {
           </button>
         </section>
 
-        {/* Metrics Grid: 1 col mobile, 12 col desktop (4/8 split) */}
+        {/* Metrics Grid */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-16">
-          {/* Revenue Card: Full width on mobile/tablet */}
           <div className="lg:col-span-4 bg-white p-6 md:p-8 flex flex-col justify-between border border-gray-100 shadow-sm">
             <div>
               <p className="text-xs md:text-sm text-outline font-label uppercase tracking-widest mb-1">Total Revenue</p>
@@ -58,7 +59,6 @@ export default function Dashboard({ orders, onMenuOpen }) {
             </div>
           </div>
 
-          {/* Bento Cards: 1 col mobile, 2 col tablet+ */}
           <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="bg-[#F4F7F6] p-6 md:p-8 flex flex-col justify-between border border-gray-100">
               <div className="flex justify-between items-center mb-8">
@@ -84,10 +84,10 @@ export default function Dashboard({ orders, onMenuOpen }) {
           </div>
         </section>
 
-        {/* Bottom Row: 1 col on mobile/tablet, 12 col on large desktop */}
+        {/* Bottom Row */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          
-          {/* Recent Orders Table: Scrollable on mobile */}
+
+          {/* Recent Orders Table */}
           <section className="lg:col-span-8 overflow-hidden">
             <div className="flex justify-between items-center mb-8">
               <h3 className="text-xl md:text-2xl font-headline font-bold tracking-tight">Recent Orders</h3>
@@ -136,14 +136,17 @@ export default function Dashboard({ orders, onMenuOpen }) {
             </div>
           </section>
 
-          {/* Top Sellers Section */}
+          {/* Top Sellers */}
           <section className="lg:col-span-4">
             <h3 className="text-xl md:text-2xl font-headline font-bold tracking-tight mb-8">Top Sellers</h3>
             <div className="flex flex-col gap-4 md:gap-6">
               {topSellers.map((item) => (
                 <div key={item.name} className="bg-white p-4 flex gap-4 border border-gray-50 group hover:shadow-md transition-shadow">
-                  <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-50 overflow-hidden shrink-0">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-50 overflow-hidden shrink-0 flex items-center justify-center">
+                    {item.image
+                      ? <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      : <span className="material-symbols-outlined text-[28px] text-[#CCCCCC]">image</span>
+                    }
                   </div>
                   <div className="flex flex-col justify-center">
                     <p className="text-[9px] uppercase tracking-widest text-secondary font-bold mb-1">{item.category}</p>
@@ -156,7 +159,6 @@ export default function Dashboard({ orders, onMenuOpen }) {
               ))}
             </div>
 
-            {/* Quote Box: Becomes a card on mobile */}
             <div className="mt-8 bg-[#1A1A1A] p-6 md:p-8 text-white rounded-sm">
               <p className="font-headline font-light italic text-base md:text-lg leading-tight mb-4">
                 "Success is not final, failure is not fatal..."
@@ -164,8 +166,8 @@ export default function Dashboard({ orders, onMenuOpen }) {
               <p className="text-[9px] uppercase tracking-[0.3em] opacity-40">Daily Inspiration</p>
             </div>
           </section>
-        </div>
 
+        </div>
       </main>
     </>
   );

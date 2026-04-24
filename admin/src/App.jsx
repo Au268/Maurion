@@ -15,7 +15,10 @@ export default function App() {
   // State to manage the drawer visibility
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const triggerRefresh = () => setUpdate((prev) => !prev);
+  const triggerRefresh = () => {
+  console.log("triggerRefresh called"); // add this
+  setUpdate((prev) => !prev);
+};
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -23,16 +26,20 @@ export default function App() {
       setOrders(data);
     };
 
-    const fetchProducts = async () => {
-      const productsData = await getProducts();
-      if (productsData && productsData.data) {
-        setProducts(productsData.data);
-      }
-    };
-
+   
     fetchOrders();
-    fetchProducts();
   }, [update]);
+  useEffect(() => {
+  console.log("useEffect running, update:", update); // add this
+  const fetchProducts = async () => {
+    const productsData = await getProducts();
+    console.log("fetchProducts response:", productsData); // add this
+    if (productsData && productsData.data) {
+      setProducts(productsData.data);
+    }
+  };
+  fetchProducts();
+}, [update]);
 
   return (
     <BrowserRouter>

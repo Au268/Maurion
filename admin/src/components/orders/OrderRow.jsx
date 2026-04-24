@@ -8,6 +8,7 @@ export default function OrderRow({ order,onStatusUpdate }) {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showAddressPopup, setShowAddressPopup] = useState(false);
 
   const handleUpdate = async (newStatus) => {
     setIsUpdating(true);
@@ -87,6 +88,68 @@ export default function OrderRow({ order,onStatusUpdate }) {
         {formattedDate}
       </td>
 
+           {/* Shipping Address */}
+<td className="py-8 px-6">
+  <button 
+    onClick={() => setShowAddressPopup(true)}
+    className="text-xs font-bold text-[#71877E] hover:text-black underline underline-offset-4 transition-colors"
+  >
+    View Shipping Detail
+  </button>
+
+  {/* Full Screen Popup */}
+  {showAddressPopup && (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/20 backdrop-blur-sm" 
+        onClick={() => setShowAddressPopup(false)} 
+      />
+
+      {/* Modal Card */}
+      <div className="relative bg-white w-full max-w-sm rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.2)] p-8 animate-in fade-in zoom-in-95 duration-300">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-sm font-black uppercase tracking-[0.2em]">Shipping Details</h3>
+          <button 
+            onClick={() => setShowAddressPopup(false)}
+            className="text-gray-400 hover:text-black transition-colors"
+          >
+            <span className="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Recipient</p>
+            <p className="text-sm font-bold text-[#2D2D2D]">{order.shipping.firstName} {order.shipping.lastName}</p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Address</p>
+            <p className="text-sm text-[#2D2D2D] leading-relaxed">
+              {order.shipping.address}<br />
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Country</p>
+            <p className="text-sm text-[#2D2D2D] leading-relaxed">
+              {order.shipping.city}, {order.shipping.county} , {order.shipping.country}<br />
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Zip Code</p>
+            <p className="text-sm text-[#2D2D2D] leading-relaxed">
+              {order.shipping.postcode}<br />
+            </p>
+          </div>
+          <div>
+            <p className="text-[10px] uppercase font-bold text-gray-400 mb-1">Contact</p>
+            <p className="text-sm text-[#2D2D2D]">{order.shipping.phone} <br /> {order.shipping.email}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+</td>
       {/* Total */}
       <td className="py-8 px-6 text-sm font-bold text-[#2D2D2D]">
         {formattedTotal}

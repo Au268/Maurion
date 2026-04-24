@@ -1,18 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const {addProduct, deleteProduct } = require('../controllers/productController');
-const {getAllProducts,getProductById} = require("../controllers/getProducts");
+const { addProduct, deleteProduct, editProduct } = require('../controllers/productController');
+const { getAllProducts, getProductById } = require('../controllers/getProducts');
 const { upload } = require('../config/cloudinary');
 
-// GET /api/products/get
 router.get('/get', getAllProducts);
+router.post('/getById', getProductById);
 
-router.post("/getById",getProductById);
-
-// POST /api/products/add  →  multipart/form-data with image file
-router.post('/add', upload.single('image'), addProduct);
-
-// DELETE /api/products/:id
+// upload.array('images', 10) — field name 'images', max 10 files
+router.post('/add',      upload.array('images', 10), addProduct);
+router.post('/edit/:id', upload.array('images', 10), editProduct);
 router.delete('/:id', deleteProduct);
 
 module.exports = router;

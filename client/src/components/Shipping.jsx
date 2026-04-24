@@ -9,16 +9,15 @@ const Shipping = () => {
   useEffect(() => { scrollTo(0, 0); }, []);
 
   const [shipping, setShipping] = useState(() => {
-    // Persist shipping data so Back button restores it
     const saved = sessionStorage.getItem('shipping');
     return saved ? JSON.parse(saved) : {
       firstName: '', lastName: '', email: '',
       phone: '', address: '', city: '',
-      state: '', zip: '', country: 'United Kingdom',
+      county: '', postcode: '', country: 'United Kingdom',
     };
   });
 
-  const tax   = totalPrice * 0.08;
+  const tax = totalPrice * 0.08;
   const total = totalPrice + tax;
 
   const handleChange = e => setShipping({ ...shipping, [e.target.name]: e.target.value });
@@ -60,6 +59,7 @@ const Shipping = () => {
       <div className="flex flex-col lg:flex-row gap-16">
 
         {/* Form */}
+        <div className="flex flex-col lg:flex-row gap-16">
         <div className="flex-1">
           <h2 className="font-headline text-3xl font-black tracking-tighter uppercase text-zinc-900 mb-8">
             Shipping Info
@@ -72,9 +72,9 @@ const Shipping = () => {
               { name: 'phone',     label: 'Phone',      col: 2 },
               { name: 'address',   label: 'Address',    col: 2 },
               { name: 'city',      label: 'City',       col: 1 },
-              { name: 'state',     label: 'County',     col: 1 },
-              { name: 'zip',       label: 'Postcode',   col: 1 },
-              { name: 'country',   label: 'Country',    col: 1 },
+              { name: 'county',    label: 'County',     col: 1 }, // Updated
+              { name: 'postcode',  label: 'Postcode',   col: 1 }, // Updated
+              { name: 'country',   label: 'Country',    col: 1 }, // Updated
             ].map(f => (
               <div key={f.name} className={f.col === 2 ? 'md:col-span-2' : ''}>
                 <label className="block text-xs font-black uppercase tracking-widest text-zinc-400 mb-2">{f.label}</label>
@@ -88,7 +88,7 @@ const Shipping = () => {
               </div>
             ))}
           </div>
-
+            </div>
           <div className="flex gap-4 mt-10">
             <Link
               to="/cart"

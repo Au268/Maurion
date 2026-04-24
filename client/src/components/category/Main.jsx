@@ -30,12 +30,30 @@ const Main = ({ sizes, colors, toggleSize, toggleColor, filteredProducts, sortOp
                     key={product._id || product.id}
                     className="group cursor-pointer"
                   >
-                    <div className="aspect-3/4 bg-secondary-container overflow-hidden mb-6 relative">
-                      <img
-                        alt={product.imageAlt || product.title}
-                        src={product.imageUrl || product.image}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
+                      <div className="aspect-3/4 bg-secondary-container overflow-hidden mb-6 relative">
+                      {(() => {
+                        const firstImage =
+                          product.images?.[0]?.url || product.imageUrl || product.image || null;
+                        const imageCount = product.images?.length ?? (product.image || product.imageUrl ? 1 : 0);
+                        return (
+                          <>
+                            {firstImage
+                              ? <img
+                                  alt={product.imageAlt || product.title}
+                                  src={firstImage}
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                />
+                              : <span className="material-symbols-outlined text-[40px] text-[#CCCCCC] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">image</span>
+                            }
+                            {imageCount > 1 && (
+                              <span className="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">
+                                +{imageCount}
+                              </span>
+                            )}
+                          </>
+                        );
+                      })()}
+
                       <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button className="bg-surface-container-lowest p-3 rounded-full shadow-xl flex items-center justify-center">
                           <span className="material-symbols-outlined text-primary">add</span>

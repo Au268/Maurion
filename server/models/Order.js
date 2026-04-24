@@ -1,14 +1,19 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
-  order_id:       { type: String, required: true, unique: true },
-  customer_id:    { type: String, required: true },
+  order_id:        { type: String, required: true, unique: true },
+  customer_id:     { type: String, required: true },
   shipping: {
     firstName: String,
     lastName:  String,
     address:   String,
     city:      String,
+    state:     String,   // Changed from county
+    country:   String,   // Changed from Country
+    postcode:       String,   // Changed from postcode and type to String
     email:     String,
+    phone:     String,
+    county:    String
   },
   items: [
     {
