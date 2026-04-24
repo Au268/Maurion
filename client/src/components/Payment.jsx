@@ -100,10 +100,7 @@ const PaymentForm = ({ total, onSuccess }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-zinc-400 font-bold">
-          <span className="material-symbols-outlined text-base text-green-500">lock</span>
-          Secured by Stripe · Test card: 4242 4242 4242 4242
-        </div>
+        
 
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-500 font-medium">
