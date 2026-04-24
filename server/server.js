@@ -13,7 +13,8 @@ app.use(cors({
     'https://maurion-gzav.vercel.app',
     'http://localhost:5173',
     'https://www.maurion.co.uk',
-    'http://localhost:5174'
+    'http://localhost:5174',
+    "https://maurion-admin.vercel.app"
   ],
   credentials: true
 }));
